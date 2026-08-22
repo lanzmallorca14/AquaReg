@@ -1,14 +1,8 @@
 import React from 'react';
-import { 
-  createBrowserRouter, 
-  RouterProvider, 
-  Route, 
-  createRoutesFromElements,
-  Navigate
-} from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Route, createRoutesFromElements, Navigate } from 'react-router-dom';
 import { Toaster } from 'sonner';
 import { supabase } from '../supabaseClient';
-import { AquaRegProvider, useAquaAuth } from "./components/context/AquaRegCONTEXT"; 
+import { AquaRegProvider, useAquaAuth } from './components/context/AquaRegCONTEXT';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
