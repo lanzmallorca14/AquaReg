@@ -8,16 +8,35 @@ import {
 import heroBg from './components/photo/romblom1.jpg';
 import { useAquaData } from './components/context/AquaRegCONTEXT';
 
+// Define strict TypeScript interface for Vessel objects
+interface Vessel {
+  id: string | number;
+  status?: string;
+  vessel_name?: string;
+  owner_name?: string;
+  owner?: string;
+  gear_type?: string;
+  barangay?: string;
+  rejection_reason?: string;
+  notes?: string;
+  remarks?: string;
+  scheduled_date?: string;
+  inspection_date?: string;
+  asset_category?: string;
+  type?: string;
+  is_motorized?: boolean;
+}
+
 export default function Homepage() {
   const navigate = useNavigate();
   const { Vessels = [], loading } = useAquaData();
 
-  const [showTermsModal, setShowTermsModal] = useState(false);
-  const [vesselSearch, setVesselSearch] = useState("");
+  const [showTermsModal, setShowTermsModal] = useState<boolean>(false);
+  const [vesselSearch, setVesselSearch] = useState<string>("");
   const [statusFilter, setStatusFilter] = useState<'all' | 'scheduled' | 'rejected'>('all');
   
-  // Track selected vessel data if re-registering from a rejected card
-  const [reRegisterData, setReRegisterData] = useState(null);
+  // Track selected vessel data if re-registering from a rejected card with correct typing
+  const [reRegisterData, setReRegisterData] = useState<Vessel | null>(null);
 
   // Standard "Register Vessel" flow (Fresh Registration)
   const handleRegisterClick = () => {
@@ -28,7 +47,7 @@ export default function Homepage() {
   };
 
   // Dedicated "Register Again" flow for Rejected/Flagged Cards
-  const handleReRegister = (vessel) => {
+  const handleReRegister = (vessel: Vessel) => {
     setReRegisterData(vessel);
     localStorage.setItem('reRegisterVesselData', JSON.stringify(vessel));
     localStorage.setItem('isReRegistering', 'true');
@@ -63,7 +82,7 @@ export default function Homepage() {
 
   // --- DASHBOARD FOCUS: SCHEDULED & REJECTED / FLAGGED VESSELS ---
   const filteredVessels = useMemo(() => {
-    return Vessels.filter((v) => {
+    return (Vessels as Vessel[]).filter((v) => {
       const vesselIdStr = String(v?.id || '');
 
       const status = (v?.status || '').toLowerCase();
@@ -92,11 +111,11 @@ export default function Homepage() {
   }, [Vessels, vesselSearch, statusFilter]);
 
   const scheduledCount = useMemo(() => {
-    return Vessels.filter((v) => v?.status?.toLowerCase() === 'scheduled').length;
+    return (Vessels as Vessel[]).filter((v) => v?.status?.toLowerCase() === 'scheduled').length;
   }, [Vessels]);
 
   const rejectedCount = useMemo(() => {
-    return Vessels.filter((v) => {
+    return (Vessels as Vessel[]).filter((v) => {
       const status = (v?.status || '').toLowerCase();
       return status === 'rejected' || status === 'flagged';
     }).length;
