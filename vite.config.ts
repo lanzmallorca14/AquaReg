@@ -5,6 +5,7 @@ import tailwindcss from '@tailwindcss/vite';
 import { visualizer } from 'rollup-plugin-visualizer';
 
 export default defineConfig({
+  base: '/', // Ensures correct asset path resolution on Vercel
   plugins: [
     // Ang React at Tailwind plugins ay kailangan para sa build,
     // huwag silang buburahin.
