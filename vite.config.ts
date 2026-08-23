@@ -10,8 +10,11 @@ export default defineConfig({
     // huwag silang buburahin.
     react(),
     tailwindcss(),
-    // Bundle size visualizer plugin
-    visualizer({ open: true }),
+    // Bundle size visualizer plugin (open: false para hindi mag-error sa Vercel)
+    visualizer({ 
+      open: false,
+      filename: 'dist/stats.html' 
+    }),
   ],
   resolve: {
     alias: {
@@ -26,8 +29,10 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks(id) {
-          // Puts heavy node_modules libraries into a separate vendor file
+          // Puts heavy node_modules libraries into separate vendor files for better caching
           if (id.includes('node_modules')) {
+            if (id.includes('lucide-react')) return 'vendor-lucide';
+            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router-dom')) return 'vendor-react';
             return 'vendor';
           }
         },
