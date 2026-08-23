@@ -2,6 +2,7 @@ import path from 'path';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
+import { visualizer } from 'rollup-plugin-visualizer';
 
 export default defineConfig({
   plugins: [
@@ -9,6 +10,8 @@ export default defineConfig({
     // huwag silang buburahin.
     react(),
     tailwindcss(),
+    // Bundle size visualizer plugin
+    visualizer({ open: true }),
   ],
   resolve: {
     alias: {
