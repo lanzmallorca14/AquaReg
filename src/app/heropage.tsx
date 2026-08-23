@@ -17,7 +17,7 @@ export default function Homepage() {
   const [statusFilter, setStatusFilter] = useState<'all' | 'scheduled' | 'rejected'>('all');
   
   // Track selected vessel data if re-registering from a rejected card
-  const [reRegisterData, setReRegisterData] = useState<any>(null);
+  const [reRegisterData, setReRegisterData] = useState(null);
 
   // Standard "Register Vessel" flow (Fresh Registration)
   const handleRegisterClick = () => {
@@ -28,7 +28,7 @@ export default function Homepage() {
   };
 
   // Dedicated "Register Again" flow for Rejected/Flagged Cards
-  const handleReRegister = (vessel: any) => {
+  const handleReRegister = (vessel) => {
     setReRegisterData(vessel);
     localStorage.setItem('reRegisterVesselData', JSON.stringify(vessel));
     localStorage.setItem('isReRegistering', 'true');
@@ -39,7 +39,6 @@ export default function Homepage() {
     setShowTermsModal(false);
     
     if (reRegisterData) {
-      // Pass existing vessel data via state; card remains visible until Supabase successfully updates/replaces it
       navigate('/new-registration', { 
         state: { 
           reRegisterVessel: reRegisterData, 
@@ -64,7 +63,7 @@ export default function Homepage() {
 
   // --- DASHBOARD FOCUS: SCHEDULED & REJECTED / FLAGGED VESSELS ---
   const filteredVessels = useMemo(() => {
-    return Vessels.filter((v: any) => {
+    return Vessels.filter((v) => {
       const vesselIdStr = String(v?.id || '');
 
       const status = (v?.status || '').toLowerCase();
@@ -93,11 +92,11 @@ export default function Homepage() {
   }, [Vessels, vesselSearch, statusFilter]);
 
   const scheduledCount = useMemo(() => {
-    return Vessels.filter((v: any) => v?.status?.toLowerCase() === 'scheduled').length;
+    return Vessels.filter((v) => v?.status?.toLowerCase() === 'scheduled').length;
   }, [Vessels]);
 
   const rejectedCount = useMemo(() => {
-    return Vessels.filter((v: any) => {
+    return Vessels.filter((v) => {
       const status = (v?.status || '').toLowerCase();
       return status === 'rejected' || status === 'flagged';
     }).length;
@@ -254,7 +253,7 @@ export default function Homepage() {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredVessels.map((vessel: any) => {
+                {filteredVessels.map((vessel) => {
                   const status = (vessel.status || '').toLowerCase();
                   const isRejected = status === 'rejected' || status === 'flagged';
 
