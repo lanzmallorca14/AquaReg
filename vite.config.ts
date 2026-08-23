@@ -25,14 +25,18 @@ export default defineConfig({
   // File types to support raw imports. Never add .css, .tsx, or .ts files to this.
   assetsInclude: ['**/*.svg', '**/*.csv'],
   build: {
-    chunkSizeWarningLimit: 1000, // Raises the warning threshold to 1MB to match real-world app sizes safely
+    chunkSizeWarningLimit: 1600, // Safe limit for real-world apps with UI icons
     rollupOptions: {
       output: {
         manualChunks(id) {
           // Puts heavy node_modules libraries into separate vendor files for better caching
           if (id.includes('node_modules')) {
-            if (id.includes('lucide-react')) return 'vendor-lucide';
-            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router-dom')) return 'vendor-react';
+            if (id.includes('lucide-react')) {
+              return 'vendor-lucide';
+            }
+            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router-dom')) {
+              return 'vendor-react';
+            }
             return 'vendor';
           }
         },
